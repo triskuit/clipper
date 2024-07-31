@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "API Request Extension",
+  "version": "1.0",
+  "description": "A Chrome extension that makes an API request and displays the data.",
+  "permissions": ["activeTab", "tabs", "scripting", "storage"],
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "64": "images/icon-64.png",
+      "128": "images/icon-128.png"
+    }
+  },
+  "host_permissions": [
+    "https://api.notion.com/v1/*",
+    "https://www.linkedin.com/*"
+  ],
+  "options_page": "options/index.html"
+}
