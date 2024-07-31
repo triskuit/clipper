@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "API Request Extension",
-  "version": "1.0",
-  "description": "A Chrome extension that makes an API request and displays the data.",
+  "name": "Clipper",
+  "version": "0.1",
+  "description": "A job clipper for Notion",
   "permissions": ["activeTab", "tabs", "scripting", "storage"],
   "action": {
     "default_popup": "popup/index.html",
@@ -12,9 +12,6 @@
       "128": "images/icon-128.png"
     }
   },
-  "host_permissions": [
-    "https://api.notion.com/v1/*",
-    "https://www.linkedin.com/*"
-  ],
+  "host_permissions": ["https://api.notion.com/v1/*"],
   "options_page": "options/index.html"
 }

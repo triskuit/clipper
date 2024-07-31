@@ -3,6 +3,12 @@ import { linkedin, builtin } from "./scrapers.js";
 const linkDiv = document.getElementById("link");
 const errorBox = document.getElementById("error");
 
+const scrapers = {
+  linkedin,
+  builtin,
+  builtincolorado: builtin,
+};
+
 window.addEventListener("DOMContentLoaded", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const tab = tabs[0];
@@ -39,7 +45,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 const { token, databaseID } = await chrome.storage.sync.get();
 
-// TODO: add errir handling if no token + databaseID is retrieved
+// TODO: add error handling if no token + databaseID is retrieved
+// TODO: replace with notion auth integration
 
 const NOTION_TOKEN = token;
 const NOTION_DATABASE_ID = databaseID;
@@ -56,8 +63,6 @@ async function makePage(properties) {
   const body = getBody(properties);
   const bodyJSON = JSON.stringify(body);
 
-  console.log({ body });
-
   const data = await fetch(url, {
     method: "POST",
     headers: headers,
@@ -68,18 +73,11 @@ async function makePage(properties) {
       return data;
     })
     .catch((error) => {
-      console.log({ error });
       console.error("Error:", error);
     });
 
   return data;
 }
-
-const scrapers = {
-  linkedin,
-  builtin,
-  builtincolorado: builtin,
-};
 
 function getBody(properties) {
   const body = {
