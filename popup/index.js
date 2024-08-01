@@ -1,4 +1,4 @@
-import { linkedin, builtin } from "./scrapers.js";
+import { linkedin, builtin, jobot, indeed } from "./scrapers.js";
 
 const linkDiv = document.getElementById("link");
 const errorBox = document.getElementById("error");
@@ -7,6 +7,8 @@ const scrapers = {
   linkedin,
   builtin,
   builtincolorado: builtin,
+  jobot,
+  indeed,
 };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -29,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
         func: scrapers[domain],
       },
       async (results) => {
-        console.log({ results });
+        console.log(results[0].result);
         const data = await makePage(results[0].result);
 
         const link = document.createElement("a");
@@ -61,6 +63,7 @@ async function makePage(properties) {
   };
 
   const body = getBody(properties);
+  console.log({ body });
   const bodyJSON = JSON.stringify(body);
 
   const data = await fetch(url, {
@@ -111,11 +114,6 @@ function getBody(properties) {
           },
         ],
       },
-      Location: {
-        select: {
-          name: properties.location,
-        },
-      },
       "Job Description": {
         rich_text: [
           {
@@ -133,6 +131,14 @@ function getBody(properties) {
       },
     },
   };
+
+  if (properties.location) {
+    body.properties.Location = {
+      select: {
+        name: properties.location,
+      },
+    };
+  }
 
   if (properties.applicationType) {
     body.properties["Application Type"] = {

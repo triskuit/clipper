@@ -109,4 +109,68 @@ function builtin() {
   }
 }
 
-export { linkedin, builtin };
+function jobot() {
+  const title = document.querySelector(".header-title").innerText;
+  const company = "";
+  const salary = document.querySelector("[data-info='compensation']").innerText;
+  const location = titleCase(
+    document.querySelector("[data-info='remote']").innerText
+  );
+  const description = document.querySelector(".JobDescription").innerText;
+  const jobURL = document.URL;
+  const applicationType = "Jobot";
+
+  function titleCase(str) {
+    if (!str) {
+      return "";
+    }
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map(function (word) {
+        return word.replace(word[0], word[0]?.toUpperCase());
+      })
+      .join(" ");
+  }
+
+  return {
+    title,
+    company,
+    salary,
+    location,
+    description,
+    applicationType,
+    jobURL,
+  };
+}
+
+function indeed() {
+  const jobPost = document.querySelector(".fastviewjob");
+
+  const title = jobPost
+    .querySelector(".jobsearch-JobInfoHeader-title")
+    ?.innerText?.split("\n")[0];
+  const company = jobPost.querySelector(
+    "[data-company-name] > span > a"
+  )?.innerText;
+  const salary = jobPost.querySelector(
+    "#salaryInfoAndJobType > span"
+  ).innerText;
+  const location = jobPost.querySelector(
+    '[aria-label="Work setting"] li'
+  )?.innerText;
+  const description = jobPost.querySelector("#jobDescriptionText").innerText;
+
+  const applicationType = "Indeed";
+
+  return {
+    title,
+    company,
+    salary,
+    location,
+    description,
+    applicationType,
+  };
+}
+
+export { linkedin, builtin, jobot, indeed };
