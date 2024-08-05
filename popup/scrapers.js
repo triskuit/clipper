@@ -173,4 +173,39 @@ function indeed() {
   };
 }
 
-export { linkedin, builtin, jobot, indeed };
+function google() {
+  const jobPost = document.querySelectorAll(
+    '[tabindex="0"][data-title][role="dialog"]'
+  )[1];
+
+  const title = jobPost.querySelector("h1")?.innerText;
+
+  const details = Array.from(
+    jobPost
+      .querySelector("h1")
+      .parentElement.children[2].querySelectorAll("span[class]")
+  ).map((i) => i.innerText);
+
+  const salary =
+    details?.find((str) => /a year|an hour/i.test(str)) || "Unknown";
+
+  const info = jobPost
+    ?.querySelector("h1")
+    ?.parentElement.children[1]?.innerText.split("•")
+    ?.map((str) => str.trim());
+
+  const location = info[1]?.split(",")[0];
+  const company = info[0];
+
+  const description = jobPost.querySelector("h3")?.parentElement?.innerText;
+
+  return {
+    title,
+    company,
+    salary,
+    location,
+    description,
+  };
+}
+
+export { linkedin, builtin, jobot, indeed, google };

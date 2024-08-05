@@ -1,4 +1,4 @@
-import { linkedin, builtin, jobot, indeed } from "./scrapers.js";
+import { linkedin, builtin, jobot, indeed, google } from "./scrapers.js";
 
 const linkDiv = document.getElementById("link");
 const errorBox = document.getElementById("error");
@@ -9,6 +9,7 @@ const scrapers = {
   builtincolorado: builtin,
   jobot,
   indeed,
+  google,
 };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -24,24 +25,27 @@ window.addEventListener("DOMContentLoaded", () => {
       setError(`No scraper for current domain: ${tab.url}`);
       return;
     }
+    try {
+      chrome.scripting.executeScript(
+        {
+          target: { tabId: tab.id },
+          func: scrapers[domain],
+        },
+        async (results) => {
+          console.log(results, results[0].result);
+          const data = await makePage(results[0].result);
 
-    chrome.scripting.executeScript(
-      {
-        target: { tabId: tab.id },
-        func: scrapers[domain],
-      },
-      async (results) => {
-        console.log(results[0].result);
-        const data = await makePage(results[0].result);
+          const link = document.createElement("a");
+          link.setAttribute("href", data.url);
+          link.innerText = "link";
 
-        const link = document.createElement("a");
-        link.setAttribute("href", data.url);
-        link.innerText = "link";
-
-        linkDiv.appendChild(link);
-        linkDiv.classList.remove("loading");
-      }
-    );
+          linkDiv.appendChild(link);
+          linkDiv.classList.remove("loading");
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   });
 });
 
